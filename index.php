@@ -10,17 +10,22 @@ $ffi = FFI::cdef("
 ", "./so/async.so");
 
 $start = microtime(true);
-echo "PHP: Starting async task...\n";
+echo "PHP: Starting async task..   .\n";
 
-$sideTask = $ffi->run_async("Ngoding",3);
-$mainTask = $ffi->run_async("Scroll Fesnuk",10);
+$sideTask = $ffi->run_async("Ngoding", 5);
+$mainTask = $ffi->run_async("Scroll Fesnuk", 10);
+// $otherTask = $ffi->run_async("Ngocok", 7);
+$otherTask = $ffi->run_async("Makan", 2);
+$otherTask1 = $ffi->run_async("Berak", 7);
 
 
-echo " PHP: Waiting while task runs...\n";
 
-while (!$ffi->task_done($mainTask) || !$ffi->task_done($sideTask)) {
-    echo "⏳ PHP: Still waiting...\n";
-    usleep(500_000); 
+
+echo " PHP: Waiting while tasks runs..\n";
+
+while (!$ffi->task_done($mainTask) || !$ffi->task_done($sideTask) || !$ffi->task_done($otherTask)|| !$ffi->task_done($otherTask1)) {
+    //dely blocking kasi sikit aja
+    usleep(2000);
 }
 
-echo " PHP: Detected task is done took ". (microtime(true) - $start).PHP_EOL;
+echo "PHP: Detected tasks have done took " . (microtime(true) - $start) . PHP_EOL;

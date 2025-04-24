@@ -2,31 +2,35 @@
 
 class FFI
 {
-    public function run_async(string $name, int $delay): AsyncTask {
+    //for async
+    public function run_async(string $name, int $delay): AsyncTask
+    {
 
         return new AsyncTask;
     }
-    public function task_done(AsyncTask $task): int {
+    public function task_done(AsyncTask $task): int
+    {
         return 1 ?? 0;
     }
 
-    public function watch_file(string $file){}
+    //for watch file
+    public function watch_file(string $file) {}
+    function file_changed() {}
+    function stop_watching() {}
 
-    function file_changed(){}
-    function stop_watching(){}
+    function NewSpeechChannel(VoiceType $voiceType = null, $speechChannel) {}
+    function CFStringCreateWithCString($alloc, $cstring, $encoding) {}
+    function SpeechBusy(){}
+    function SpeakCFString($speechChannel, $string, $opt){}
+    function SetSpeechRate(){}
+    function SetSpeechPitch(){}
 }
-
-
 
 class AsyncTask
 {
-    /** @var string */
     public string $task_name;
 
-    /** @var int */
     public int $is_done;
 }
 
-class AsyncTaskParam {
-    
-}
+class VoiceType {}
