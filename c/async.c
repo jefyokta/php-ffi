@@ -9,23 +9,38 @@ typedef struct {
     int is_done;
 } AsyncTask;
 
+typedef struct {
+    AsyncTask* task;
+    int delay;
+} AsyncTaskParam;
+
 void* async_task(void* arg) {
-    AsyncTask* task = (AsyncTask*) arg;
-    printf("⏳ C: Async task %s is running...\n", task->task_name);
+    AsyncTaskParam* param = (AsyncTaskParam*) arg;
+    AsyncTask* task = param->task;
+
+    printf("C: Async task %s is running...\n", task->task_name);
     fflush(stdout);
-    sleep(2); // simulasi kerja
-    printf("✅ C: Async task %s done!\n", task->task_name);
+    sleep(param->delay); 
+    printf("C: Async task %s done!\n", task->task_name);
     fflush(stdout);
     task->is_done = 1;
+
+    free(param);
     return NULL;
 }
 
-AsyncTask* run_async(const char* name) {
+AsyncTask* run_async(const char* name, int delay) {
     pthread_t tid;
+
     AsyncTask* task = malloc(sizeof(AsyncTask));
     task->task_name = strdup(name);
     task->is_done = 0;
-    pthread_create(&tid, NULL, async_task, task);
+
+    AsyncTaskParam* param = malloc(sizeof(AsyncTaskParam));
+    param->task = task;
+    param->delay = delay;
+
+    pthread_create(&tid, NULL, async_task, param);
     pthread_detach(tid);
     return task;
 }
