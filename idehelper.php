@@ -23,6 +23,11 @@ class FFI
     public function task_done(AsyncTask $task): int {
         return 1 ?? 0;
     }
+
+    public function watch_file(string $file){}
+
+    function file_changed(){}
+    function stop_watching(){}
 }
 
 
