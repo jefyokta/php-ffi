@@ -25,5 +25,4 @@ while (1) {
 }
 
 
-echo "PHP: Berhenti pantau\n";
-$ffi->stop_watching();
+
