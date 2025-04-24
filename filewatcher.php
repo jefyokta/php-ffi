@@ -1,10 +1,21 @@
 <?php
-
-$ffi = FFI::cdef("
-    void watch_file(const char* path);
-    int file_changed();
-    void stop_watching();
-", __DIR__ . "/so/filewatcher.so");
+if (PHP_OS === 'Linux') {
+    //please built the so file first
+    $ffi = FFI::cdef("
+        void watch_file(const char* path);
+        int file_changed();
+        void stop_watching();
+    ", __DIR__ . "/so/filewatcher_inotify.so");
+} elseif (PHP_OS === 'Darwin') {
+    $ffi = FFI::cdef("
+            void watch_file(const char* path);
+            int file_changed();
+            void stop_watching();
+        ", __DIR__ . "/so/filewatcher.so");
+}
+else{
+    throw new Error("yntkts");
+}
 
 $file = __FILE__;
 
@@ -23,6 +34,3 @@ while (1) {
     }
     usleep(500_000);
 }
-
-
-
