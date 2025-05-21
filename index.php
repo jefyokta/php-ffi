@@ -23,7 +23,7 @@ $otherTask1 = $ffi->run_async("Berak", 7);
 
 echo " PHP: Waiting while tasks runs..\n";
 
-while (!$ffi->task_done($mainTask) || !$ffi->task_done($sideTask) || !$ffi->task_done($otherTask)|| !$ffi->task_done($otherTask1)) {
+while (!$mainTask->is_done || !$ffi->task_done($sideTask) || !$ffi->task_done($otherTask) || !$ffi->task_done($otherTask1)) {
     //dely blocking kasi sikit aja
     usleep(2000);
 }

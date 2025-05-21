@@ -1,14 +1,54 @@
 const char* TF_Version(void);
 
+
 typedef struct TF_Graph TF_Graph;
 typedef struct TF_Status TF_Status;
 typedef struct TF_SessionOptions TF_SessionOptions;
 typedef struct TF_Session TF_Session;
-typedef struct TF_Buffer TF_Buffer;
-typedef struct TF_Tensor TF_Tensor;
+typedef struct TF_Buffer {
+    void* data;
+    size_t length;
+    void (*data_deallocator)(void* data, size_t length);
+  } TF_Buffer;
+  typedef struct TF_Tensor TF_Tensor;
+typedef struct TF_Operation TF_Operation;
+typedef enum {
+    TF_FLOAT = 1,
+    TF_DOUBLE = 2,
+    TF_INT32 = 3,
+    TF_UINT8 = 4,
+    TF_INT16 = 5,
+    TF_INT8 = 6,
+    TF_STRING = 7,
+    TF_COMPLEX64 = 8,
+    TF_INT64 = 9,
+    TF_BOOL = 10,
+    TF_QINT8 = 11,
+    TF_QUINT8 = 12,
+    TF_QINT32 = 13,
+    TF_BFLOAT16 = 14,
+    TF_QINT16 = 15,
+    TF_QUINT16 = 16,
+    TF_UINT16 = 17,
+    TF_COMPLEX128 = 18,
+    TF_HALF = 19,
+    TF_RESOURCE = 20,
+    TF_VARIANT = 21,
+    TF_UINT32 = 22,
+    TF_UINT64 = 23
+} TF_DataType;
+
+typedef struct {
+  TF_Operation* oper;
+  int index;
+} TF_Output;
+typedef void (*TF_Deallocator)(void* data, size_t len, void* arg);
+
 
 TF_Graph* TF_NewGraph(void);
 void TF_DeleteGraph(TF_Graph*);
+TF_Operation* TF_GraphOperationByName(const TF_Graph* graph, const char* oper_name);
+
 
 TF_Status* TF_NewStatus(void);
 void TF_DeleteStatus(TF_Status*);
@@ -55,3 +95,13 @@ TF_Session* TF_LoadSessionFromSavedModel(
     TF_Graph* graph,
     void* meta_graph_def,
     TF_Status* status);
+
+    TF_Tensor* TF_NewTensor(
+        TF_DataType,
+        const int64_t* dims,
+        int num_dims,
+        void* data,
+        size_t len,
+        TF_Deallocator deallocator,
+        void* deallocator_arg);
+      

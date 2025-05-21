@@ -13,6 +13,8 @@ class FFI
         return 1 ?? 0;
     }
 
+    public function capture_image(){}
+
     //for watch file
     public function watch_file(string $file) {}
     function file_changed() {}
